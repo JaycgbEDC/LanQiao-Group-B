@@ -1,0 +1,86 @@
+题目描述
+小明对数位中含有2、0、1、9 的数字很感兴趣，在1 到40 中这样的数包
+括1、2、9、10 至32、39 和40，共28 个，他们的和是574，平方和是14362。
+注意，平方和是指将每个数分别平方后求和。
+请问，在1 到2019 中，所有这样的数的平方和是多少？
+
+答案：2658417853
+
+思路
+方法一：想要找是否包含字串，很容易想到string的find函数，但是缺点就是需要将每一项都要转换成string。
+方法二：对每项逐步取余除10操作，即可获得每项的每位数，对比即可。
+
+
+解：
+
+法一：#include <iostream>
+#include <sstream>
+using namespace std;
+typedef long long ll;
+
+
+int main() {
+	ll ans = 0;
+	for (int i = 1; i <= 2019; ++i) {
+		stringstream ss;   
+		ss << i;              //将整数转换为字符串
+		string str = ss.str();          
+		if (str.find('0') != string::npos) ans += i * i;        //find函数返回元素在字符串中的位置，如果不存在该元素，则返回npos(可以看成int型的常量)
+		else if (str.find('1') != string::npos) ans += i * i; 
+		else if (str.find('2') != string::npos) ans += i * i;
+		else if (str.find('9') != string::npos) ans += i * i;
+	}
+	cout << ans << endl;
+	return 0;
+}
+
+法二：
+#include <iostream>
+using namespace std;
+typedef long long ll;
+
+
+bool str[10] = {false};
+bool check(int n) {
+	while (n) {
+		if (str[n % 10]) return true;
+		n /= 10;
+	}
+	return false;
+}
+
+
+int main() {
+	ll ans = 0;
+	str[0] = str[1] = str[2] = str[9] = true;
+	for (int i = 1; i <= 2019; ++i) {
+		if (check(i)) ans += i * i;
+	}
+	cout << ans << endl;
+	return 0;
+}
+法三(和二差不多)：
+#include <iostream>
+#include <sstream>
+using namespace std;
+typedef long long ll;
+
+
+bool check(int n) {
+	while (n) {
+		int temp = n % 10;
+		if (temp == 0 || temp == 1 || temp == 2 || temp == 9) return true;
+		n /= 10;
+	}
+	return false;
+}
+
+
+int main() {
+	ll ans = 0;
+	for (int i = 1; i <= 2019; ++i) {
+		if (check(i)) ans += i * i;
+	}
+	cout << ans << endl;
+	return 0;
+}
