@@ -6,3 +6,49 @@
 法术施展完7 周后，求雨将获得成功，降雨量为7 周能量的中位数。
 由于干旱太久，小明希望这次求雨的降雨量尽可能大，请问最大值是多少？
 
+解：这题考思路：中位数基于排好序。
+证明：无法找到比34更优的方案了。如下图，假设每周选的数已经排好序
+
+第一周: x  x  x  x  x  x  x  ( x1,x2,x3,x4,x5,x6 满足 x1<x2<x3<x4<x5<x6）
+第二周: x  x  x  x  x  x  x
+第三周: x  x  x  x  x  x  x
+第四周: x  x  x  x  x  x  x
+第五周: x  x  x  x  x  x  x
+第六周: x  x  x  x  x  x  x
+第七周: x  x  x  x  x  x  x 
+
+则标记红色的是每周的中位数：
+
+第一周: x  x  x  x  x  x  x  
+第二周: x  x  x  x  x  x  x
+第三周: x  x  x  x  x  x  x
+第四周: x  x  x  x  x  x  x
+第五周: x  x  x  x  x  x  x
+第六周: x  x  x  x  x  x  x
+第七周: x  x  x  x  x  x  x 
+
+此时不看第几周,每一行里：红色的x右边的x必然比x大。
+
+假设上面的七行按行按照x由小到大重新排序后得到
+
+x  x  x  x1  x  x  x  
+x  x  x  x2  x  x  x
+x  x  x  x3  x  x  x
+x  x  x  x4  x  x  x
+x  x  x  x5  x  x  x
+x  x  x  x6  x  x  x
+x  x  x  x7  x  x  x 
+
+则x1<x2<x3<x4<x5<x6<x7  题目要求的中位数的中位数就是x4了
+
+问题是x4最大能取到多少呢？注意到上图中x4右下角(如下图）的元素都应比x4大。。(共15个)
+
+因此答案为49-15=34
+
+x  x  x  x    x  x  x  
+x  x  x  x    x  x  x
+x  x  x  x    x  x  x
+x  x  x  x4  x  x  x
+x  x  x  x    x  x  x
+x  x  x  x    x  x  x
+x  x  x  x    x  x  x 
