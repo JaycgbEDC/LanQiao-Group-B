@@ -43,3 +43,78 @@
 10000010100101001010110000000100101010001011101000
 00111100001000010000000110111000000001000000001011
 10000001100111010111010001000110111010101101111000
+
+1.dfs:
+//假定向右为X正方向、向下为Y正方向
+#include <iostream>
+#include <cstring>
+#include <math.h>
+using namespace std;
+
+
+const int expo = pow(10, 6);//pow(x,y)表示求x的y次方 
+int maze[40][60], maze_min[40][60], minn = expo;//maze数组表示输入的迷宫， 
+char path[1500];//定义存取路径的数组 
+string ans;  //没有被初始化，所以它是被调用的默认构造函数----空字符串构造函数（默认构造函数）：构造一个空字符串，长度为零个字符。
+char chdir[4] = {'D', 'L', 'R', 'U'}; 
+int dir[4][2] = { //走向 
+	{0, 1},     //向下走一步
+	{-1, 0},    //向左走一步
+	{1, 0},      //向右走一步
+	{0, -1}     //向上走一步
+};
+
+
+void dfs(int startx, int starty, int step) {
+	if (step > minn) return;//剪枝：当已走步数大于已到达终点的最少步数时回溯 
+	if (starty == 29 && startx == 49) { //这里我们可以选择两种方法，第一种是按题意来的正宗，第二种略带投机取巧成分（因为我就是按D、L、R、U走的，第一个到达终点的字典序必为最小，这也是我设置chdir顺序的原因） 
+//		string temp;
+//		for(int i=1;i<pos;i++)
+//			temp+=a[i];
+//		if(pos<best) {//是最短的路
+//			ans=temp;
+//			best=pos;
+//		}
+//		else if(pos==best&&temp<ans)	ans=temp;//在实现路时最短的同时，保证字典序最小。
+		if (step < minn) { //只有当步数小于最小步数记录时才更新（等于时不更新，因为定义的走向就是字典序最小） 
+			minn = step;
+			string temp;
+			for (int i = 1; i < step; ++i) temp += path[i];
+			ans = temp;
+		} 
+		return; //回溯
+	}
+	for (int i = 0; i < 4; ++i) {
+		int nextx = startx + dir[i][0];
+		int nexty = starty + dir[i][1]; 
+		if (maze[nexty][nextx] != 1 && nextx >= 0 && nextx <= 49 && nexty >= 0 && nexty <= 29) {
+			if (step + 1 > maze_min[nexty][nextx]) return;//剪枝：当下一步的步数大于下一步记录最短步数时，回溯 
+			maze_min[nexty][nextx] = step + 1;
+			path[step] = chdir[i];
+			maze[nexty][nextx] = 1;//走过的地方设为障碍物 
+			dfs(nextx, nexty, step + 1);
+			maze[nexty][nextx] = 0;//回溯时恢复
+		}
+	}
+}
+
+
+int main() {
+	int startx = 0, starty = 0; 
+	for (int i = 0; i < 30; ++i) {     //输入(不知道为什么把char改成int再复制粘贴数据到命令行窗口读取不完全！)
+		for (int j = 0; j < 50; ++j) {
+			char t;
+			cin >> t;
+			maze[i][j] = t - '0';
+		}
+	}
+	memset(maze_min, expo, sizeof(maze_min)); //memset表示将数组的所有值初始化为10^6（在头文件cstring中） 
+	maze[starty][startx] = 1;   //起点标记为1(表示已走，变为障碍物)
+	dfs(startx, starty, 1); //深度优先算法，调入起点和步数 
+	cout << ans << endl; //输出走到终点的最短路径 
+//	cout << minn - 1 << endl;// 输出最少步数 
+	return 0;
+} 
+
+2.bfs:
+
