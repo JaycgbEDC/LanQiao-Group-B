@@ -13,3 +13,92 @@
 对于 40% 的评测用例，1 <= n <= 1000。
 对于 80% 的评测用例，1 <= n <= 100000。
 对于所有评测用例，1 <= n <= 1000000。
+
+
+解：
+1.我写的：
+#include <iostream>
+using namespace std;
+
+
+int main() {
+	int n, temp;//n表示输入的整数、temp表示临时i，count统计个数 
+	while (cin >> n) {
+		int count = 0;
+		for (int i = 1; i <= n; ++i) {
+			temp = i;//因为后面涉及到自除的值的改变，如果直接用i那么相当于i自除10，然后又++i导致i不连续 
+			while(1) { //从个位开始分别比较相邻位的大小 
+				if (temp < 10) { //只剩下最后一个数表示该数符合题意，同时对个位数也成立，跳出本层循环 
+					count++;
+					break;
+				}
+				int a = temp % 10;//取temp的个位 
+				temp /= 10;//temp去掉个位数 
+				int b = temp % 10;//取已去掉个位数的temp的个位数 
+				if (a < b) break;//不符合题意跳出本层循环，开始下一个整数的验证		
+			}
+		}
+		cout << count << endl;	
+	}
+	return 0;
+} 
+
+2.别人写的1：（转换为了字符串）
+#include <iostream>
+#include <sstream>
+using namespace std;
+void i2s(int num,string &str){
+	stringstream ss;
+	ss<<num;
+	ss>>str;
+}
+int main(){
+	int n;
+	while (cin >>n) {
+		int ans = 0;
+		for(int i=1;i<=n;++i){
+		bool flag=true;
+		string s;
+		i2s(i,s);
+		for(int j=0;j<s.length()-1;++j){
+			if(s[j]>s[j+1]){//比较ASCII值 
+				flag=false;
+			}
+		}
+		if(flag){
+			ans++;
+		}
+	}
+	cout<<ans<<endl;
+	}
+	return 0;
+}
+3.别人写的2：
+#include <iostream>
+using namespace std;
+
+
+bool judge(int num) {
+	int a = num % 10;
+	num /= 10;
+	while (num) {
+		int b = num % 10;
+		if (a < b) return false;
+		a = b;
+		num /= 10;
+	}
+	return true;
+}
+
+
+int main(){
+	int n;
+	while (cin >> n) {
+		int count = 0;\
+		for (int i = 1; i <= n; ++i) {
+			if (judge(i)) count++;//判断是否为数位递增的数
+		}
+		cout << count << endl;
+	}
+	return 0;
+}
