@@ -16,3 +16,31 @@ a[2] 和 a[4] 可能是三元组的中心。
 【评测用例规模与约定】
 对于 50% 的评测用例，2 <= n <= 100，0 <= 数列中的数 <= 1000。
 对于所有评测用例，2 <= n <= 1000，0 <= 数列中的数 <= 10000。
+
+解：
+#include <iostream>
+using namespace std;
+
+
+int main() {
+	int n, a[n], count = 0;
+	cin >> n;
+	for (int i = 0; i < n; ++i) {
+		cin >> a[i];
+	}
+	for (int j = 1; j < n - 1; ++j) {//扫描中心 
+		int flag = 0;//标志位，标记j是否已被记过数 
+		for (int i = 0; i < j; ++i) {//扫描中心的左边 
+			if (flag) break;//被标记过的话直接开始下一个数 
+			for (int k = j + 1; k < n; ++k) {//扫描中心的右边 
+				if (a[i] < a[j] && a[j] < a[k]) {//a[i] < a[j] < a[k] 不可以直接这样写在表达式里面（就因为这里搞了一会！） 
+					count++;
+					flag = 1;//已标记 
+					break;
+				}
+			}
+		}
+	}
+	cout << count << endl;
+	return 0;
+} 
