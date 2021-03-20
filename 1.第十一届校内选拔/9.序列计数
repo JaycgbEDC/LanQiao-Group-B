@@ -26,3 +26,40 @@
 对于 50% 的评测用例，1 <= n <= 10；
 对于 80% 的评测用例，1 <= n <= 100；
 对于所有评测用例，1 <= n <= 1000。
+
+解：
+1.别人写的：（我自己还没写出来）
+#include <iostream>
+#include <queue>
+using namespace std;
+
+
+int dp[1010][1010];//dp[i][j]表示前一个数是i，当前数是j
+/*
+1.当输入的整数为n时，最后一个序列必为(n, n) 
+2.递推式：f(i, j) = 1 + f(i, j - 1) + f(j, abs(i - j) - 1) 
+3.解释：我们用f(i, j)表示前一个数是i，当前数是1到j的合法序列的个数。
+	则f(i, j)可分为两个部分：
+		a. i作为前一个数，从1到j-1为当前数的合法序列的个数已经计算好
+		b. 求以j为尾数，后面选择1到abs(i - j) - 1的合法序列的个数 
+4.递归结束条件：当j - 1 <= 0或 abs(i - j) - 1 < 0
+*/
+int dfs(int x,int y){
+	if(y<=0) return 0;
+	if(dp[x][y]>0){
+		return dp[x][y];
+	}
+	int res=0;
+	res++;
+	res=(res+dfs(x,y-1)+dfs(y,abs(x-y)-1))%10000;
+	dp[x][y]=res;
+	return res;
+}
+
+
+int main() {
+	int n;
+	cin >> n;
+	cout<<dfs(n,n);
+	return 0;
+}
