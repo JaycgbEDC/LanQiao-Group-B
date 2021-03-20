@@ -25,3 +25,74 @@ ggggg
 对于 30% 的评测用例，2 <= n, m <= 20。
 对于 70% 的评测用例，2 <= n, m <= 100。
 对于所有评测用例，2 <= n, m <= 1000，1 <= k <= 1000。
+
+
+解：bfs问题
+//假设左上角为原点，向右为x正方向，向下为y正方向 
+#include <iostream>
+#include <queue>
+using namespace std;
+
+
+int n, m, k;
+char land[1000][1000];
+struct node {
+	int x, y;
+};
+int dir[4][2] {
+	{-1, 0},//向左 
+	{0, -1},//向上 
+	{1, 0},//向右 
+	{0, 1}//向下 
+};
+
+
+void solution() {
+	queue <node> q;
+	for (int i = 0; i < n; ++i) { //找到初始状态下长草的坐标并放入队列 
+		for (int j = 0; j < m; ++j) {
+			if (land[i][j] == 'g') {
+				node g;
+				g.x = j;
+				g.y = i;
+				q.push(g);
+			}
+		}
+	}
+	int temp_size = q.size();
+	while (k--) {
+		for (int j = 0; j < temp_size; ++j) {//把当月的长了草的土地从队列中取完 
+			node temp = q.front();
+			q.pop();
+			node newn;
+			for (int i = 0; i <4; ++i) {
+				newn.x = temp.x + dir[i][0];
+				newn.y = temp.y + dir[i][1];
+				if (land[newn.y][newn.x] == '.' && newn.x >= 0 && newn.y >= 0 && newn.x < m && newn.y < n) {
+					q.push(newn);
+					land[newn.y][newn.x] = 'g';
+				}
+			}
+		}
+		temp_size = q.size();//更新下个月长了草的土地 
+	}
+}
+
+
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			cin >> land[i][j];
+		}
+	}
+	cin >> k;
+	solution();
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			cout << land[i][j];
+		}
+		cout << endl;
+	}
+	return 0;
+}
